@@ -1,0 +1,39 @@
+/* styles/Home.module.css */
+
+.container {
+  display: flex;
+  justify-content: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Adjust as needed */
+/* TimeUntil.module.css */
+.pageContainer {
+  display: flex;
+}
+
+.sidebar {
+  width: 200px; /* Adjust the width as needed */
+  padding: 10px;
+  background-color: #f0f0f0;
+}
+
+.mainContent {
+  display: flex;
+  flex-wrap: wrap;
+
+}
+.pageTitle {
+  font-size: 4rem;
+  text-align: center;
+}
+
+.loader{
+
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+}
+/* Add more styles as needed */
