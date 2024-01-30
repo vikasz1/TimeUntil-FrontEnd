@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import styles from "../styles/AddCounter.module.css";
 import axios from "axios";
-import { toast } from "react-toastify";
+import { toast , Slide} from "react-toastify";
 import "dotenv/config";
 
 const API = process.env.NEXT_PUBLIC_API_URL;
@@ -31,7 +31,13 @@ const AddCounter = ({ events, setData }) => {
         console.log("response" + response);
       });
 
-      toast("Submitted Successfully!");
+      toast.success("Submitted Successfully", {
+        autoClose: 5000,
+        closeOnClick: true,
+        draggable: true,
+        theme: "light",
+        transition: Slide,
+      });
       setData([...events, formData]);
     } else {
       console.log("You entered: " + formData.name);

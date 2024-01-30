@@ -2,12 +2,15 @@
 
 import React, { useEffect, useState } from "react";
 import Card from "./Card";
-import AddCounter from "./AddCounter";
+import Link from "next/link";
 import styles from "../styles/TimeUntil.module.css";
+import { Button } from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
+
 import { Audio } from "react-loader-spinner";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import "dotenv/config";
+import { fetchDataFromApi } from "../utils/getDates";
+
 const API = process.env.NEXT_PUBLIC_API_URL;
 
 // const events = [
@@ -19,24 +22,15 @@ const API = process.env.NEXT_PUBLIC_API_URL;
 
 const events = [];
 
-const sidebarItems = [
-  "Item 1",
-  "Item 2",
-  "Item 3",
-  // Add more sidebar items as needed
-];
-
 const TimeUntil = () => {
   const [events, setData] = useState([]);
   const [isLoading, setLoading] = useState(true);
-// console.log(API)
+  // console.log(API)
   useEffect(() => {
-    fetch(API)
-      .then((res) => res.json())
-      .then((data) => {
-        setData(data);
-        setLoading(false);
-      });
+    fetchDataFromApi().then((data) => {
+      setData(data);
+      setLoading(false);
+    });
   }, []);
 
   const parseDates = (targetDate) => {
@@ -47,21 +41,16 @@ const TimeUntil = () => {
 
   return isLoading ? (
     <div className={styles.loader}>
-      <Audio color="red" width={200} height={200} /><h1 className="ml-10 text-6xl">Loading...</h1>
+      <Audio color="red" width={200} height={200} />
+      <h1 className="ml-10 text-6xl">Loading...</h1>
     </div>
   ) : (
     <>
-      <ToastContainer />
+      <Link href="/Manage">
+        <Button>Manage counters</Button>
+      </Link>
       <h1 className={styles.pageTitle}>All My Counters</h1>
       <div className={styles.pageContainer}>
-        {/* <div className={styles.sidebar}>
-    <ul>
-    {sidebarItems.map((item, index) => (
-      <li key={index}>{item}</li>
-      ))}
-      </ul>
-    </div> */}
-
         <div className={styles.mainContent}>
           {events.map((event, index) => (
             <Card
@@ -72,7 +61,6 @@ const TimeUntil = () => {
           ))}
         </div>
       </div>
-      <AddCounter events={events} setData={setData} />
     </>
   );
 };
