@@ -6,7 +6,7 @@ import Link from "next/link";
 import styles from "../styles/TimeUntil.module.css";
 import { Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-
+import { useUser } from "@auth0/nextjs-auth0/client";
 import { Audio } from "react-loader-spinner";
 import "dotenv/config";
 import { fetchDataFromApi } from "../utils/getDates";
@@ -24,12 +24,14 @@ const events = [];
 
 const TimeUntil = () => {
   const [events, setData] = useState([]);
-  const [isLoading, setLoading] = useState(true);
+  // const [isLoading, setLoading] = useState(true);
+  const { user, error, isLoading } = useUser();
+
   // console.log(API)
   useEffect(() => {
     fetchDataFromApi().then((data) => {
       setData(data);
-      setLoading(false);
+      // setLoading(false);
     });
   }, []);
 
@@ -49,6 +51,19 @@ const TimeUntil = () => {
       <Link href="/Manage">
         <Button>Manage counters</Button>
       </Link>
+      {!user ? (
+        <a href="/api/auth/login">
+          <button>Login</button>
+        </a>
+      ) : (
+        <>
+          <h1>Hello {user?.name}</h1>
+          <a href="/api/auth/logout">
+            <button className="btn-primary btn">logout</button>
+          </a>
+        </>
+      )}
+
       <h1 className={styles.pageTitle}>All My Counters</h1>
       <div className={styles.pageContainer}>
         <div className={styles.mainContent}>
