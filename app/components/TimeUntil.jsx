@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import Card from "./Card";
 import Link from "next/link";
@@ -8,11 +9,10 @@ import { Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { Audio } from "react-loader-spinner";
-import "dotenv/config";
 import { fetchDataFromApi } from "../utils/getDates";
+require("dotenv").config();
 
 const API = process.env.NEXT_PUBLIC_API_URL;
-
 // const events = [
 //   { title: "Birthday (24 Years)", date: new Date("2024-05-28") },
 //   { title: "Optum Joining Date", date: new Date("2024-05-07") },
@@ -22,19 +22,39 @@ const API = process.env.NEXT_PUBLIC_API_URL;
 
 const events = [];
 
+const getUserData = (allUserData, user) => {
+  if (user)
+    allUserData.forEach((element) => {
+      console.log("Result", element.timers);
+      return element.email == user.email ? element.timers : "Nothing";
+    });
+};
+
 const TimeUntil = () => {
-  const [events, setData] = useState([]);
+  const [allUserData, setUserData] = useState([]);
   // const [isLoading, setLoading] = useState(true);
   const { user, error, isLoading } = useUser();
+  const [userTimers, setUserTimers] = useState([]);
 
-  // console.log(API)
+  // console.log(user);
+
   useEffect(() => {
-    fetchDataFromApi().then((data) => {
-      setData(data);
+    fetchDataFromApi(API).then((data) => {
+      setUserData(data);
       // setLoading(false);
     });
   }, []);
+  // const finalData = getUserData(allUserData, user);
+  // console.log("finaldata", allUserData, user, finalData);
 
+  useEffect(() => {
+    if (user)
+      allUserData.forEach((element) => {
+        if (element.email == user.email) setUserTimers(element.timers);
+      });
+  });
+
+  console.log("Mere Timers", userTimers);
   const parseDates = (targetDate) => {
     const dateObj = new Date(targetDate);
     // console.log("date: " + dateObj.getDay());
@@ -57,7 +77,9 @@ const TimeUntil = () => {
         </a>
       ) : (
         <>
-          <h1>Hello {user?.name}</h1>
+          {/* {console.log(user)} */}
+          <h1>Hello {user?.given_name || user?.name}</h1>
+
           <a href="/api/auth/logout">
             <button className="btn-primary btn">logout</button>
           </a>
@@ -67,11 +89,11 @@ const TimeUntil = () => {
       <h1 className={styles.pageTitle}>All My Counters</h1>
       <div className={styles.pageContainer}>
         <div className={styles.mainContent}>
-          {events.map((event, index) => (
+          {userTimers.map((event, index) => (
             <Card
               key={index}
               eventTitle={event.title}
-              targetDate={parseDates(event.date)}
+              targetDate={parseDates(event.timestamp)}
             />
           ))}
         </div>

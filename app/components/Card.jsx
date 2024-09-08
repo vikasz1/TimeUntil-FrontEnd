@@ -11,7 +11,7 @@ const Card = ({ eventTitle, targetDate }) => {
     const intervalId = setInterval(() => {
       setCountdown(calculateCountdown(targetDate));
       // console.log(targetDate.getFullYear())
-    }, 1000);
+    }, 1000); 
 
     // Clean up the interval when the component unmounts
     return () => clearInterval(intervalId);
