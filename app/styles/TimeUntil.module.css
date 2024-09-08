@@ -22,18 +22,30 @@
 .mainContent {
   display: flex;
   flex-wrap: wrap;
-
 }
 .pageTitle {
   font-size: 4rem;
   text-align: center;
 }
 
-.loader{
-
+.loader {
   display: flex;
   height: 100vh;
   justify-content: center;
   align-items: center;
+}
+
+.userLogo {
+  margin: 40px;
+  border-radius: 50%;
+  transition: transform 0.3s ease-in-out;
+
+}
+.userLogo:hover {
+  border-radius: 50%;
+  border: 3px solid red;
+  transform: scale(2);
+  cursor: pointer;
+  
 }
 /* Add more styles as needed */
